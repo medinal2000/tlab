@@ -6,35 +6,24 @@ from math import e
 class Perceptron(object):
     
     #class constructor
-    def __init__(self, input_size, learning_rate = 1, epochs = 10):
+    def __init__(self, input_size, learning_rate = 0.1, epochs = 100):
         self.weight = np.random.rand(input_size + 1)   #bias will be accounted for in the weight and input vectors rather than separately
         self.learning_rate = learning_rate
         self.epochs = epochs
 
 
-    #Defintion of the activation function ---- CURRENTLY A STEP FUNCTION
+
+    #Defintion of the activation function ---- CURRENTLY A SIGMOID FUNCTION
     def activation_function(self, input):
+       return 1/(1 + e**-input)    #for binary results > 0.5 = 1 ; < 0.5 = 0
        
        
-       #sigmoid function
-       return 1/(1 + e**-input)
-       
-       
-       #step function
-       #if input >= 0:
-       #     return 1
-        
-       #else:
-       #    return 0
-
-
     
     #recieves an input vector and processes it, returning the results
-    def prediction(self, inputs): 
+    def prediction(self, input): 
         
-        v = self.weight.dot(inputs)         #v is the dot product of the weights and inputs vector
-            
-        output_result = self.activation_function(v)
+        result = self.weight.dot(input)       
+        output_result = self.activation_function(result)
         
         return output_result
     
@@ -46,23 +35,28 @@ class Perceptron(object):
     
     def train(self, all_inputs, desired_outputs):
         
+        inputs = np.insert(all_inputs, 0, 1, axis=1)      #inserts 1 at the 0th index of each row (incorporate  bias)
+        
         #loop to train the perceptron the number of times specified
         for training_session in range(self.epochs):
             
+            #get result of each input (1 row in all_inputs)
             for index in range(desired_outputs.shape[0]):
-                inputs = np.insert(all_inputs[index], 0, 1)      #inserts a 1 at the 0th index of each row; this is to incorporate the bias
-                result = self.prediction(inputs)
-                error = desired_outputs[index] - result
-                self.weight = self.weight + self.learning_rate * error * inputs      #adjusting the weight
+                result = self.prediction(inputs[index])
+                grad_descent = -2 * (desired_outputs[index] - result) * inputs[index]
+
+                new_weight = self.weight - self.learning_rate * grad_descent 
+                self.weight = new_weight
+            
             
     
     #all_inputs may be a 1D or 2D array
     def test(self, all_inputs):
+        
+        inputs = np.insert(all_inputs, 0, 1, axis=1) 
         results = np.zeros(all_inputs.shape[0])
         
         for index in range(all_inputs.shape[0]):
-            inputs = np.insert(all_inputs[index], 0, 1)      #inserts a 1 at the 0th index of each row; this is to incorporate the bias
-            results[index] = self.prediction(inputs)
+            results[index] = self.prediction(inputs[index])
             
         return results
-    

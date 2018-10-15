@@ -2,17 +2,18 @@ import numpy as np
 from Perceptron import Perceptron
     
 #########################TRAIN PERCEPTRONS##########################################    
-    
-#code for AND
-                
-and_perceptron = Perceptron(input_size = 2)
-
-all_inputs = np.array([
+#this will not be changed in this program
+all_inputs = np.array([    
     [0,0],
     [0,1],
     [1,0],
     [1,1]
     ])
+
+
+#code for AND
+                
+and_perceptron = Perceptron(input_size = 2)
 
 desired_output = np.array([0,0,0,1])
 
@@ -24,13 +25,6 @@ and_perceptron.train(all_inputs, desired_output)
 
 or_perceptron = Perceptron(input_size = 2)
 
-all_inputs = np.array([
-    [0,0],
-    [0,1],
-    [1,0],
-    [1,1]
-    ])
-
 desired_output = np.array([0,1,1,1])
 
 or_perceptron.train(all_inputs, desired_output)
@@ -41,17 +35,11 @@ or_perceptron.train(all_inputs, desired_output)
 
 xor_perceptron = Perceptron(input_size = 2)
 
-all_inputs = np.array([
-    [0,0],
-    [0,1],
-    [1,0],
-    [1,1]
-    ])
-
 desired_output = np.array([0,1,1,0])
 
 xor_perceptron.train(all_inputs, desired_output)
-    
+
+
     
 ###############################TEST PERCEPTRONS#########################################
 
@@ -65,9 +53,4 @@ print(results)
 results = xor_perceptron.test(all_inputs)
 print(results)
 
-
-
-
-
-##https://pythonmachinelearning.pro/perceptrons-the-first-neural-networks/
 
